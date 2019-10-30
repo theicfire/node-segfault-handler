@@ -216,8 +216,9 @@ SEGFAULT_HANDLER {
   n = SNPRINTF(
     sbuff,
     BUFF_SIZE,
-    "PID %d received SIGSEGV for address: 0x%lx\n",
+    "PID %d received signal %d for address: 0x%lx\n",
     pid,
+    sig,
     address
   );
 
@@ -334,6 +335,9 @@ NAN_METHOD(RegisterHandler) {
     sa.sa_sigaction = segfault_handler;
     sa.sa_flags   = SA_SIGINFO | SA_RESETHAND;
     sigaction(SIGSEGV, &sa, NULL);
+    sigaction(SIGABRT, &sa, NULL);
+    sigaction(SIGFPE, &sa, NULL);
+    sigaction(SIGILL, &sa, NULL);
   #endif
 }
 
